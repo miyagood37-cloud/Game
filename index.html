@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniCash - Number Guessing Game</title>
+    
+    <!-- Monetag Site Verification Tag -->
+    <meta name="monetag" content="a98f8685d9ffb55268e6ceb6d95fa130">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-950 text-gray-100 flex flex-col items-center justify-center min-h-screen p-4 font-sans">
+
+    <!-- Game Card -->
+    <div class="bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl w-full max-w-sm text-center">
+        <h1 class="text-xl font-bold text-cyan-400 mb-2"><i class="fa-solid fa-gamepad mr-2"></i> Number Guess Game</h1>
+        <p class="text-xs text-gray-400 mb-6">1 se 10 ke beech ka ek number guess karo!</p>
+
+        <div id="message" class="bg-gray-950 border border-gray-800 p-3 rounded-xl text-sm mb-4 text-gray-300">
+            Game shuru ho chuki hai, apna number daalein!
+        </div>
+
+        <input 
+            type="number" 
+            id="user-guess" 
+            min="1" 
+            max="10" 
+            placeholder="1 se 10 tak number likhein" 
+            class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-sm text-center mb-4 focus:outline-none focus:border-cyan-500 text-gray-100"
+        >
+
+        <button 
+            id="guess-btn" 
+            class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-medium py-3 rounded-xl transition shadow-lg shadow-cyan-600/30 mb-2"
+        >
+            Check Guess
+        </button>
+
+        <button 
+            id="reset-btn" 
+            class="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 py-2 rounded-xl text-xs transition hidden"
+        >
+            Dobara Kheleinp
+        </button>
+    </div>
+
+    <!-- Game Logic Script -->
+    <script>
+        let randomNumber = Math.floor(Math.random() * 10) + 1;
+        let attempts = 3;
+
+        const guessInput = document.getElementById('user-guess');
+        const guessBtn = document.getElementById('guess-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const messageBox = document.getElementById('message');
+
+        guessBtn.addEventListener('click', () => {
+            const userVal = parseInt(guessInput.value);
+
+            if (!userVal || userVal < 1 || userVal > 10) {
+                messageBox.innerHTML = "<span class='text-yellow-400'>Kripya 1 se 10 ke beech ka valid number dalein!</span>";
+                return;
+            }
+
+            attempts--;
+
+            if (userVal === randomNumber) {
+                messageBox.innerHTML = "<span class='text-emerald-400 font-bold'>🎉 Mubarak ho! Aapne sahi number guess kar liya!</span>";
+                endGame();
+            } else if (attempts === 0) {
+                messageBox.innerHTML = `<span class='text-red-400 font-bold'>Game Over! Sahi number ${randomNumber} tha.</span>`;
+                endGame();
+            } else if (userVal > randomNumber) {
+                messageBox.innerHTML = `<span class='text-orange-400'>Bahut zyada hai! Baaki koshishein: ${attempts}</span>`;
+            } else {
+                messageBox.innerHTML = `<span class='text-orange-400'>Bahut kam hai! Baaki koshishein: ${attempts}</span>`;
+            }
+            guessInput.value = '';
+        });
+
+        function endGame() {
+            guessBtn.classList.add('hidden');
+            guessInput.classList.add('hidden');
+            resetBtn.classList.remove('hidden');
+        }
+
+        resetBtn.addEventListener('click', () => {
+            randomNumber = Math.floor(Math.random() * 10) + 1;
+            attempts = 3;
+            messageBox.innerHTML = "Naya game shuru ho gaya hai, number daalein!";
+            guessInput.value = '';
+            guessBtn.classList.remove('hidden');
+            guessInput.classList.remove('hidden');
+            resetBtn.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
